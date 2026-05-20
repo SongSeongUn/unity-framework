@@ -51,7 +51,7 @@ public class ObjectPoolManager : MonoBehaviour
     [Title("Pool Settings")]
     [InfoBox("게임에 사용할 몬스터, 투사체 등의 프리팹을 여기에 등록하세요.")]
 
-    // 리스트를 테이블(표) 형태로 보여줌 -> 가독성 최강
+    // 리스트를 테이블(표) 형태로 보여줌
     [TableList(ShowIndexLabels = true, AlwaysExpanded = false)]
     [Searchable] // 풀이 많아지면 검색 가능하게 함
     public List<Pool> Pools;
@@ -63,7 +63,7 @@ public class ObjectPoolManager : MonoBehaviour
     [Title("Runtime State (Debug)")]
     [InfoBox("게임 실행 중에 현재 풀 상태를 보여줍니다.", InfoMessageType.None)]
 
-    // private 변수지만 인스펙터에서 보게 해줌 (Odin의 강력한 기능!)
+    // private 변수지만 인스펙터에서 보게 해줌
     [ShowInInspector, ReadOnly]
     [DictionaryDrawerSettings(DisplayMode = DictionaryDisplayOptions.ExpandedFoldout, KeyLabel = "Tag", ValueLabel = "Queue")]
     private Dictionary<string, Queue<Component>> _poolDictionary;
@@ -118,9 +118,6 @@ public class ObjectPoolManager : MonoBehaviour
             obj.name = $"{tag}_{i:000}";
             obj.SetActive(false);
 
-            // [핵심] 생성 시점에 T 컴포넌트를 찾아서 저장 (캐싱)
-            // 만약 T가 Transform이면 그냥 transform을 저장
-            
             if (!obj.TryGetComponent<T>(out var component))
             {
                 Debug.LogError($"[ObjectPool] {prefab.name}에 {typeof(T)} 컴포넌트가 없습니다!");
@@ -226,18 +223,4 @@ public class ObjectPoolManager : MonoBehaviour
 
         _poolDictionary.Add(tag, queue);
     }
-
-    // private async UniTask<GameObject> LoadPrefab(string path)
-    // {
-    //     try
-    //     {
-    //         // 핸들 관리 등을 생략한 간단한 로드입니다. 실제 프로젝트에선 핸들 관리가 필요할 수 있습니다.
-    //         return await Addressables.LoadAssetAsync<GameObject>(path).ToUniTask();
-    //     }
-    //     catch (Exception e)
-    //     {
-    //         Debug.LogError($"Load Failed: {path} / {e.Message}");
-    //         return null;
-    //     }
-    // }
 }

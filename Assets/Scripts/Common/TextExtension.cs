@@ -21,7 +21,6 @@ namespace Common
         [HideInInspector] public Color ActiveColor = Color.white;
         [HideInInspector] public Color InActiveColor = Color.black;
         
-        private bool _isInit = false;
         private void Awake()
         {
             InitComponents();
